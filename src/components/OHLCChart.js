@@ -9,12 +9,12 @@ import {
   Legend,
   ResponsiveContainer,
   Rectangle,
+  ReferenceLine,
 } from "recharts";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export default function OHLCChart({ data }) {
-  // Format data for Recharts (limit to last 7 entries)
-  const formattedData = data.slice(-7).map((item) => ({
+  const formattedData = data.map((item) => ({
     date: new Date(item[0]).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -24,8 +24,6 @@ export default function OHLCChart({ data }) {
     low: item[3],
     close: item[4],
   }));
-
-  // Calculate min and max for Y-axis padding
   const allPrices = formattedData.flatMap((d) => [
     d.open,
     d.high,
@@ -34,7 +32,7 @@ export default function OHLCChart({ data }) {
   ]);
   const minPrice = Math.min(...allPrices);
   const maxPrice = Math.max(...allPrices);
-  const padding = (maxPrice - minPrice) * 0.2 || 1; // Add 20% or 1 USD padding
+  const padding = (maxPrice - minPrice) * 0.2 || 1;
 
   return (
     <Box sx={{ height: 300 }}>
@@ -51,6 +49,7 @@ export default function OHLCChart({ data }) {
           />
           <Tooltip formatter={(val) => `$${val.toFixed(2)}`} />
           <Legend />
+          <ReferenceLine y={0} stroke="#000" />
           <Bar
             dataKey="open"
             fill="#8884d8"

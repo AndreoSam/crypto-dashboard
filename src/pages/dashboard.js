@@ -2,6 +2,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import {
   AppBar,
   Box,
+  CircularProgress,
   Container,
   Grid,
   IconButton,
@@ -10,11 +11,15 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import CoinCard from "@/components/CoinCard";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+
+const data_per_age = 12;
 
 const fetchData = async () => {
   const { data } = await axios.get(
@@ -34,12 +39,30 @@ const fetchData = async () => {
 
 const dashboard = ({ darkMode, setDarkMode }) => {
   const [search, setSearch] = useState("");
+  const [currentpage, setCurrentpage] = useState(1);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["coins"],
     queryFn: fetchData,
   });
-//   console.log(data);
+  //   console.log(data);
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    return data.filter((coin) =>
+      coin.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [data, search]);
+
+  const totalPages = Math.ceil(filteredData.length / data_per_age);
+  const pageData = useMemo(() => {
+    const startIndex = (currentpage - 1) * data_per_age;
+    return filteredData.slice(startIndex, startIndex + data_per_age);
+  }, [filteredData, currentpage]);
+
+  const handlePageChange = (event, page) => {
+    setCurrentpage(page);
+  };
 
   return (
     <div>
@@ -72,17 +95,33 @@ const dashboard = ({ darkMode, setDarkMode }) => {
         </Box>
 
         {isLoading ? (
-          <Typography>Loading...</Typography>
+          <Container sx={{ mt: 4, textAlign: "center" }}>
+            <CircularProgress />
+          </Container>
         ) : isError ? (
           <Typography color="error">Error to load data!</Typography>
         ) : (
-          <Grid container spacing={2}>
-            {data.map((prod)=>(
-              <Grid item xs={12} sm={6} md={4} lg={3} key={prod.id}>
-                <CoinCard data={prod}/>
+          <>
+            <Grid container spacing={2}>
+              {pageData.map((prod) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={prod.id}>
+                  <CoinCard data={prod} />
                 </Grid>
-            ))}
-          </Grid>
+              ))}
+            </Grid>
+            {totalPages > 1 && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                <Pagination
+                  count={totalPages}
+                  page={currentpage}
+                  onChange={handlePageChange}
+                  color="primary"
+                  showFirstButton
+                  showLastButton
+                />
+              </Box>
+            )}
+          </>
         )}
       </Container>
     </div>

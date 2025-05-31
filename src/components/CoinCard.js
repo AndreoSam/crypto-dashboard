@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/router";
 
 const CoinCard = ({ data }) => {
-  console.log(data);
+  // console.log(data);
   const router = useRouter();
 
   return (
@@ -28,16 +28,16 @@ const CoinCard = ({ data }) => {
             </Box>
           </Box>
           <Typography variant="body1">
-            💵 ${data.current_price.toLocaleString()}
+            Price: ${data.current_price.toLocaleString()}
           </Typography>
           <Typography variant="body2">
-            💼 Market Cap: ${data.market_cap.toLocaleString()}
+            Market Cap: ${data.market_cap.toLocaleString()}
           </Typography>
           <Typography
             variant="body2"
             color={data.price_change_percentage_24h >= 0 ? "green" : "error"}
           >
-            📈 24h: {data.price_change_percentage_24h.toFixed(2)}%
+            24h Change: {data.price_change_percentage_24h.toFixed(2)}%
           </Typography>
         </CardContent>
       </CardActionArea>
