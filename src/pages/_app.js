@@ -15,7 +15,10 @@ export default function MyApp({ Component, pageProps }) {
   });
 
   return (
-    <ClerkProvider {...pageProps}>
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      {...pageProps}
+    >
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
