@@ -34,3 +34,36 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Live Link: crypto-dashboard-git-main-andreo-samadders-projects.vercel.app
+
+# 🪙 Crypto Dashboard
+
+A responsive, authentication-protected cryptocurrency dashboard built with **Next.js**, **Material UI**, **TanStack Query**, and **Clerk.dev**. It uses **CoinGecko API** for real-time crypto data and **Chart.js** for visualizing price trends.
+
+---
+
+## 📋 Project Overview
+
+**Features:**
+- 🔐 User Authentication with Clerk.dev (Sign-up, Sign-in, Sign-out)
+- 📊 Dashboard page with:
+  - Searchable, paginated list of top cryptocurrencies
+  - Name, symbol, market cap, current price, 24h price change
+  - Dark mode support
+- 📈 Coin Details Page:
+  - Detailed info including logo, description, market data, supply info
+  - 7-day line chart of price history
+  - Exchange tickers
+  - OHLC chart (last 1 or 7 days)
+- ⚡ Responsive design with Material UI
+- 🚀 Client-side caching and auto-refetching via TanStack Query
+
+---
+
+## 🛠️ Local Setup Instructions
+
+1. **Clone the repo:**
+
+```bash
+git clone https://github.com/AndreoSam/crypto-dashboard.git
+cd crypto-dashboard
