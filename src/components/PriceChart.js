@@ -16,7 +16,7 @@ const PriceChart = ({ data }) => {
       timestamp: new Date(timestamp).toLocaleDateString(),
       price,
     })) || [];
-
+console.log("Formatted Chart Data:", data);
   if (chartData.length === 0) {
     return (
       <div

@@ -11,7 +11,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -37,9 +37,18 @@ const fetchData = async () => {
   return data;
 };
 
+const fetchSearchedData = async (search) => {
+  if (!search) return null;
+  const { data } = await axios.get(
+    `https://api.coingecko.com/api/v3/search?query=${search}`
+  );
+  return data.coins;
+};
+
 const dashboard = ({ darkMode, setDarkMode }) => {
   const [search, setSearch] = useState("");
   const [currentpage, setCurrentpage] = useState(1);
+  const [searchResults, setSearchResults] = useState(null);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["coins"],
@@ -47,12 +56,40 @@ const dashboard = ({ darkMode, setDarkMode }) => {
   });
   //   console.log(data);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search) {
+        fetchSearchedData(search).then((results) => {
+          setSearchResults(results);
+          setCurrentpage(1);
+        });
+      } else {
+        setSearchResults(null);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const displayData = useMemo(() => {
+    if (searchResults) {
+      return searchResults.map((coin) => ({
+        id: coin.id,
+        name: coin.name,
+        symbol: coin.symbol,
+        current_price: coin.market_cap_rank,
+        price_change_percentage_24h: null,
+        image: coin.large,
+      }));
+    }
+    return data || [];
+  }, [data, searchResults]);
+
   const filteredData = useMemo(() => {
-    if (!data) return [];
-    return data.filter((coin) =>
+    if (searchResults) return searchResults;
+    return displayData.filter((coin) =>
       coin.name.toLowerCase().includes(search.toLowerCase())
     );
-  }, [data, search]);
+  }, [displayData, search, searchResults]);
 
   const totalPages = Math.ceil(filteredData.length / data_per_age);
   const pageData = useMemo(() => {
@@ -105,7 +142,9 @@ const dashboard = ({ darkMode, setDarkMode }) => {
             <Grid container spacing={2}>
               {pageData.map((prod) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={prod.id}>
-                  <CoinCard data={prod} />
+                  <Box sx={{ width: "100%", height: "100%" }}>
+                    <CoinCard data={prod} />
+                  </Box>
                 </Grid>
               ))}
             </Grid>
