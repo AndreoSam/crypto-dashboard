@@ -10,13 +10,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const PriceChart = ({ data }) => {  
+const PriceChart = ({ data }) => {
   const chartData =
     data?.map(([timestamp, price]) => ({
-      timestamp: new Date(timestamp).toLocaleDateString(),
+      timestamp: new Date(timestamp).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
       price,
     })) || [];
-console.log("Formatted Chart Data:", data);
+
+  // console.log("Formatted Chart Data:", data);
+
   if (chartData.length === 0) {
     return (
       <div
@@ -33,7 +38,6 @@ console.log("Formatted Chart Data:", data);
     );
   }
   // console.log("Chart Data:", chartData);
-  
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -45,7 +49,6 @@ console.log("Formatted Chart Data:", data);
         <XAxis
           dataKey="timestamp"
           tick={{ fontSize: 12 }}
-          padding={{ left: 20, right: 20 }}
         />
         <YAxis
           domain={["auto", "auto"]}

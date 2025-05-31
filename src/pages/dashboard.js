@@ -130,6 +130,9 @@ const dashboard = ({ darkMode, setDarkMode }) => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </Box>
+        <Box>
+          <Typography variant="h5" gutterBottom>Cryptocurrencies</Typography>
+        </Box>
 
         {isLoading ? (
           <Container sx={{ mt: 4, textAlign: "center" }}>
@@ -139,10 +142,24 @@ const dashboard = ({ darkMode, setDarkMode }) => {
           <Typography color="error">Error to load data!</Typography>
         ) : (
           <>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               {pageData.map((prod) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={prod.id}>
-                  <Box sx={{ width: "100%", height: "100%" }}>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <CoinCard data={prod} />
                   </Box>
                 </Grid>

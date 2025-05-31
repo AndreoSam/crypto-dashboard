@@ -12,7 +12,8 @@ import { useRouter } from "next/router";
 
 const CoinCard = ({ data }) => {
   // console.log(data);
-  const router = useRouter();const formatMarketCap = (value) => {
+  const router = useRouter();
+  const formatMarketCap = (value) => {
     if (!value) return "$0";
 
     const num = Number(value);
@@ -27,6 +28,7 @@ const CoinCard = ({ data }) => {
     }
     return `$${num.toLocaleString("en-US")}`;
   };
+
   return (
     <Card
       variant="outlined"
@@ -34,8 +36,7 @@ const CoinCard = ({ data }) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        width:"250px"
+        width: "290px",
       }}
     >
       <CardActionArea onClick={() => router.push(`/coin/${data.id}`)}>
@@ -53,17 +54,32 @@ const CoinCard = ({ data }) => {
               </Typography>
             </Box>
           </Box>
-          <Typography variant="body1">
-            Price: ${data.current_price.toLocaleString()}
-          </Typography>
-          <Typography variant="body2">
-            Market Cap: {formatMarketCap(data.market_cap)}
+          <Typography
+            variant="body1"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <span>Price:</span>
+            <span style={{ fontWeight: "bold" }}>
+              ${data.current_price.toLocaleString()}
+            </span>
           </Typography>
           <Typography
             variant="body2"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <span>Market Cap:</span>
+            <span style={{ fontWeight: "bold" }}>
+              {formatMarketCap(data.market_cap)}
+            </span>
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{ display: "flex", justifyContent: "space-between" }}
             color={data.price_change_percentage_24h >= 0 ? "green" : "error"}
           >
-            24h Change: {data.price_change_percentage_24h.toFixed(2)}%
+            <span>24h Change:</span>
+            <span>{data.price_change_percentage_24h >= 0 ? "+" : ""}{data.price_change_percentage_24h.toFixed(2)}%</span>
           </Typography>
         </CardContent>
       </CardActionArea>
