@@ -47,14 +47,14 @@ const fetchSearchedData = async (search) => {
   return data.coins;
 };
 
-const dashboard = ({ darkMode, setDarkMode }) => {
+const Dashboard = ({ darkMode, setDarkMode }) => {
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push("/");
     }
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, router]);
 
   const [search, setSearch] = useState("");
   const [currentpage, setCurrentpage] = useState(1);
@@ -214,4 +214,4 @@ const dashboard = ({ darkMode, setDarkMode }) => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

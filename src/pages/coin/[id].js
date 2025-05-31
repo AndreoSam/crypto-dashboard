@@ -54,11 +54,7 @@ const IndividualPages = () => {
   const { id } = router.query;
   const navigate = useRouter().push;
   const { isLoaded, isSignedIn } = useAuth();
-  if (!isLoaded) return null;
-  if (!isSignedIn) {
-    router.push("/");
-    return null;
-  }
+
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["coin", id],
@@ -68,6 +64,11 @@ const IndividualPages = () => {
     staleTime: 5 * 60 * 1000,
   });
 
+  if (!isLoaded) return null;
+  if (!isSignedIn) {
+    router.push("/");
+    return null;
+  }
   if (isLoading) {
     return (
       <Container sx={{ mt: 4, textAlign: "center" }}>
