@@ -2,6 +2,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import {
   AppBar,
   Box,
+  Button,
   CircularProgress,
   Container,
   Grid,
@@ -9,6 +10,7 @@ import {
   Switch,
   TextField,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
@@ -17,8 +19,8 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import CoinCard from "@/components/CoinCard";
 import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-
+import { useRouter } from "next/router";
+import { useAuth } from "@clerk/nextjs";
 const data_per_age = 12;
 
 const fetchData = async () => {
@@ -46,6 +48,14 @@ const fetchSearchedData = async (search) => {
 };
 
 const dashboard = ({ darkMode, setDarkMode }) => {
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push("/");
+    }
+  }, [isLoaded, isSignedIn]);
+
   const [search, setSearch] = useState("");
   const [currentpage, setCurrentpage] = useState(1);
   const [searchResults, setSearchResults] = useState(null);
@@ -112,11 +122,13 @@ const dashboard = ({ darkMode, setDarkMode }) => {
               checked={darkMode}
               onChange={(e) => setDarkMode(e.target.checked)}
             />
-            <SignOutButton>
-              <IconButton color="inherit">
-                <LogoutIcon />
-              </IconButton>
-            </SignOutButton>
+            <Tooltip title="Logout" placement="bottom">
+              <SignOutButton>
+                <IconButton color="inherit">
+                  <LogoutIcon />
+                </IconButton>
+              </SignOutButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </AppBar>
@@ -131,7 +143,9 @@ const dashboard = ({ darkMode, setDarkMode }) => {
           />
         </Box>
         <Box>
-          <Typography variant="h5" gutterBottom>Cryptocurrencies</Typography>
+          <Typography variant="h5" gutterBottom>
+            Cryptocurrencies
+          </Typography>
         </Box>
 
         {isLoading ? (
@@ -139,7 +153,23 @@ const dashboard = ({ darkMode, setDarkMode }) => {
             <CircularProgress />
           </Container>
         ) : isError ? (
-          <Typography color="error">Error to load data!</Typography>
+          <Box sx={{ textAlign: "center" }}>
+            <Typography color="error" sx={{ textAlign: "center" }}>
+              Error to load data!
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => window.location.reload()}
+              sx={{
+                textTransform: "none",
+                px: 3,
+                py: 1,
+              }}
+            >
+              Retry
+            </Button>
+          </Box>
         ) : (
           <>
             <Grid

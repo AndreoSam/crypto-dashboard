@@ -6,17 +6,16 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
 } from "@mui/material";
 
 export default function TickersList({ tickers }) {
-  const topTickers = tickers.slice(0, 10); // limit to 10 for brevity
+  const topTickers = tickers.slice(0, 10);
 
   return (
     <TableContainer component={Paper} sx={{ my: 2 }}>
       <Table>
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ fontWeight: "bold" }}>
             <TableCell>Exchange</TableCell>
             <TableCell>Pair</TableCell>
             <TableCell>Price (USD)</TableCell>

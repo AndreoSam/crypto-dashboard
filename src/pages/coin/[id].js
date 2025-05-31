@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useAuth } from "@clerk/nextjs";
 import React from "react";
 import axios from "axios";
 import {
@@ -52,6 +53,13 @@ const IndividualPages = () => {
   const router = useRouter();
   const { id } = router.query;
   const navigate = useRouter().push;
+  const { isLoaded, isSignedIn } = useAuth();
+  if (!isLoaded) return null;
+  if (!isSignedIn) {
+    router.push("/");
+    return null;
+  }
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["coin", id],
     queryFn: () => fetchDetails(id),
@@ -79,7 +87,7 @@ const IndividualPages = () => {
   }
 
   const { info, chart, ohlc, tickers } = data;
-  console.log("info Details:", info);
+  // console.log("info Details:", info);
 
   return (
     <Container sx={{ mt: 4 }}>
