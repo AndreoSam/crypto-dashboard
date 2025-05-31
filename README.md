@@ -57,8 +57,7 @@ A responsive, authentication-protected cryptocurrency dashboard built with **Nex
   - OHLC chart (last 1 or 7 days)
 - ⚡ Responsive design with Material UI
 - 🚀 Client-side caching and auto-refetching via TanStack Query
-
-Live Link: crypto-dashboard-git-main-andreo-samadders-projects.vercel.app
+- Live Link: crypto-dashboard-git-main-andreo-samadders-projects.vercel.app
 ---
 
 ## 🛠️ Local Setup Instructions
